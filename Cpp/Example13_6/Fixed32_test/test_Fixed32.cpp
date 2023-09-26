@@ -1,41 +1,42 @@
 
 #include <iostream>
 #include <string>
+#include <cstdlib>
+#include <ctime>
+
 #include "Fixed32.h"
+#include "Fixed32_unit_tests.h"
+
 
 
 int main()
 {
 
-  // std:: cout << "Hello World!" << std::endl;
-  Fixed32 test(25);
+  int32_t NUM_DECIMAL_BITS = 24;
 
-  // Double Load Test
-  double load_val = -124.34;
-  test = load_val;
-
-  // Integer Load Test
-  // int32_t int_val = -65189969;
-  // test = int_val;
-
-  // // String Load Test
-  // std::string string_val = "10000011101010001111010111000011";
-  // test = string_val;
+  runDoubleLoadTest(NUM_DECIMAL_BITS);
+  runIntegerLoadTest(NUM_DECIMAL_BITS);
+  runStringLoadTest(NUM_DECIMAL_BITS);
 
 
-  std::cout << "Test:" << std::endl;
+  Fixed32 test(NUM_DECIMAL_BITS);
+  double mult1 = 12.34;
+  double mult2 = -2.34;
+  test = mult2;
+  Fixed32 test2(NUM_DECIMAL_BITS);
+  test2 = test * mult1;
+
+  std::cout << "Test1:" << std::endl;
   test.print();
-  std::cout << std::endl;
-
-  std::cout << "Test2:" << std::endl;
-  double increment_value = 1.2345;
-  // int32_t increment_value = 1879048191;
-  Fixed32 test2(25);
-  // test2 = test + test;
-  test2 = test + increment_value;
-
-
+  std::cout << std::endl << "Test2:" << std::endl;
   test2.print();
+
+  Fixed32 test3(NUM_DECIMAL_BITS);
+  test3 = mult1 * mult2;
+  std::cout << std::endl << "Test3:" << std::endl;
+  test3.print();
 
   return 0;
 }
+
+

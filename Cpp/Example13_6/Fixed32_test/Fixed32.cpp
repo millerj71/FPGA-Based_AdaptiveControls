@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdio>
 #include <string>
+// #include <bitset>
 
 #include "Fixed32.h"
 
@@ -75,19 +76,17 @@ void Fixed32::updateBinaryRepresentation(const double& rhs)
     RHS = (-1)*RHS;
   }
 
-  for (int i = 0; i < NUM_VALUE_BITS; i++)
+  for (int i = 0; i < NUM_BITS; i++)
   {
-    binary[NUM_VALUE_BITS-1 - i] = 0;
+    binary[NUM_BITS-1 - i] = 0;
 
-    if (RHS > pow(2, NUM_WHOLE_BITS - i))
+    if (RHS > pow(2, NUM_WHOLE_BITS + 1 - i))
     {
-      RHS = RHS - pow(2, NUM_WHOLE_BITS - i);
-      binary[NUM_VALUE_BITS-1 - i] = 1;
+      RHS = RHS - pow(2, NUM_WHOLE_BITS + 1 - i);
+      binary[NUM_BITS-1 - i] = 1;
     }
     
   }
-
-  binary[SIGN_BIT] = 0;
 
   for (int i = 0; i < NUM_BITS; i++)
   {
@@ -104,6 +103,10 @@ void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
 {
   int32_t number = rhs;
 
+  // std::cout << rhs << std::endl;
+
+  isNegative = 0;
+
   if (number < 0)
   {
     isNegative = 1;
@@ -119,9 +122,11 @@ void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
       number = number - pow(2,i);
       binary[i] = 1;
     }
+    // std::cout << "i = " << i << " | binary[i] = " << binary[i] << std::endl;
+
   }
 
-  binary_mag[SIGN_BIT] = 0;
+  binary[SIGN_BIT] = 0;
 
   for (int i = 0; i < NUM_BITS; i++)
   {
@@ -130,6 +135,7 @@ void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
 
   if (isNegative)
   {
+    std::cout << "APPLY TWOS"<< std::endl;
     applyTwosCompliment();
   }
 }
@@ -165,6 +171,13 @@ void Fixed32::updateBinaryRepresentation(const std::string& rhs)
       binary_mag[i] = binary[i];
     }
     applyTwosCompliment();
+  }
+  else
+  {
+    for (int i = 0; i < NUM_BITS; i++)
+    {
+      binary_mag[i] = binary[i];
+    }
   }
 
 }
@@ -208,24 +221,61 @@ void Fixed32::updateDoubleRepresentation()
 
 void Fixed32::updateIntegerRepresentation()
 {
-  int32_t update = 0;
-  for (int i = 0; i < NUM_VALUE_BITS; i++)
-  {
-    // The integer value represents how the binary would be interpretted 
-    // if it were an integer instead of a fixed point decimal. 
-    if (binary_mag[i]) 
-    {
-      update = update + pow(2, i);
-    }
+  int32_t result = 0;
+  for(int i = 0; i < NUM_BITS; ++i) {
+      if(binary_mag[NUM_BITS-1 - i]) {
+          // Using the OR operator to set the appropriate bit
+          // if the corresponding bool value is true.
+          result |= (1 << (31 - i));
+      }
   }
 
   if (isNegative)
   {
-    update = (-1)*update;
+    result = -result;
+  }
+  integer = result;
+
+  int number = integer;
+  int total_bits = sizeof(integer) * 8;
+
+  for (int i = total_bits-1; i >= 0; --i)
+  {
+    integer_binary[i] = (number & (1 << i)) ? 1 : 0;
   }
 
-  integer = update;
 }
+
+
+void Fixed32::applyTwosCompliment()
+{
+
+  bool neg_bin[32];
+  bool one[32];
+
+  for (int i = 0; i < NUM_BITS; i++)
+  {
+    neg_bin[i] = !binary[i];
+    one[i]    = 0;
+  }
+  one[0] = 1;
+
+  bool carry = 0;
+  bool update[32];
+  for (int i = 0; i < NUM_BITS; i++)
+  {
+    update[i] = neg_bin[i] ^ one[i] ^ carry;
+    carry = (neg_bin[i] & one[i]) | (carry & (neg_bin[i] ^ one[i]));
+  }
+
+  for (int i = 0; i < NUM_BITS; i++)
+  {
+    binary[i] = update[i];
+  }
+  
+}
+
+
 
 
 
@@ -267,109 +317,10 @@ void Fixed32::printInteger()
 
 void Fixed32::printIntegerBinary()
 {
-  int number = integer;
-  int total_bits = sizeof(integer) * 8;
-
   std::cout << "integer-binary = ";
-  for (int i = total_bits-1; i >= 0; --i)
+  for (int i = 0 ; i < NUM_BITS ; i++)
   {
-    int bit = (number & (1 << i)) ? 1 : 0;
-    std::cout << bit;
+    std::cout << integer_binary[NUM_BITS-1 - i];
   }
   std::cout << std::endl;
-}
-
-
-
-
-// Overloading = Operator
-Fixed32& Fixed32::operator=(const Fixed32& rhs)
-{
-  updateValueRepresentations(rhs);
-  return *this;
-}
-
-Fixed32& Fixed32::operator=(const double& rhs)
-{
-  updateValueRepresentations(rhs);
-  return *this;
-}
-
-Fixed32& Fixed32::operator=(const int32_t& rhs)
-{
-  updateValueRepresentations(rhs);
-  return *this;
-}
-
-Fixed32& Fixed32::operator=(const std::string& rhs)
-{
-  updateValueRepresentations(rhs);
-  return *this;
-}
-
-
-
-
-void Fixed32::applyTwosCompliment()
-{
-  int32_t  update;
-  uint32_t current;
-
-  current = toUnsignedInteger();
-  update  = (-1)*current;
-  toBinary(update);
-
-}
-
-uint32_t Fixed32::toUnsignedInteger()
-{
-  uint32_t output = 0;
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    if (binary[i])
-    {
-      output = output + pow(2, i);
-    }
-  }
-
-  return output;
-}
-
-void Fixed32::toBinary(int32_t input)
-{
-  int number = input;
-  int total_bits = sizeof(input) * 8;
-
-  for (int i = total_bits-1; i >= 0; --i)
-  {
-    int bit = (number & (1 << i)) ? 1 : 0;
-
-    if (bit) {binary[i] = 1;}
-    else {binary[i] = 0;}
-  }
-}
-
-
-
-
-// Overloading + Operator
-Fixed32 operator+(const Fixed32& a, const Fixed32& b)
-{
-  Fixed32 output(a.NUM_DECIMAL_BITS);
-  output = a.integer + b.integer;
-  return output;
-}
-
-Fixed32 operator+(const Fixed32& a, const double& b)
-{
-  Fixed32 B(a.NUM_DECIMAL_BITS);
-  B = b;
-  return a + B;
-}
-
-Fixed32 operator+(const double& a, const Fixed32& b)
-{
-  Fixed32 output(b.NUM_DECIMAL_BITS);
-  output = b + a;
-  return output;
 }

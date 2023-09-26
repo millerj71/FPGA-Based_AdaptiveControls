@@ -21,6 +21,7 @@ class Fixed32
 
     bool binary[32];
     bool binary_mag[32];
+    bool integer_binary[32];
     double  double_value;
     int32_t integer;
     std::string str_value;
@@ -71,14 +72,32 @@ class Fixed32
     Fixed32& operator=(const int32_t& rhs);
     Fixed32& operator=(const std::string& rhs);
 
-    // Fixed32 operator+(const Fixed32& a, const double& b);
-
 };
 
 
 Fixed32 operator+(const Fixed32& a, const Fixed32& b);
 Fixed32 operator+(const Fixed32& a, const double& b);
 Fixed32 operator+(const double& a, const Fixed32& b);
+Fixed32 operator+(const Fixed32& a, const int32_t& b);
+Fixed32 operator+(const int32_t& a, const Fixed32& b);
+Fixed32 operator+(const Fixed32& a, const std::string& b);
+Fixed32 operator+(const std::string& a, const Fixed32& b);
+
+Fixed32 operator*(const Fixed32& a, const Fixed32& b);
+Fixed32 operator*(const Fixed32& a, const double& b);
+Fixed32 operator*(const double& a, const Fixed32& b);
+Fixed32 operator*(const Fixed32& a, const int32_t& b);
+Fixed32 operator*(const int32_t& a, const Fixed32& b);
+Fixed32 operator*(const Fixed32& a, const std::string& b);
+Fixed32 operator*(const std::string& a, const Fixed32& b);
+
+Fixed32 operator/(const Fixed32& a, const Fixed32& b);
+Fixed32 operator/(const Fixed32& a, const double& b);
+Fixed32 operator/(const double& a, const Fixed32& b);
+Fixed32 operator/(const Fixed32& a, const int32_t& b);
+Fixed32 operator/(const int32_t& a, const Fixed32& b);
+Fixed32 operator/(const Fixed32& a, const std::string& b);
+Fixed32 operator/(const std::string& a, const Fixed32& b);
 
 
 
