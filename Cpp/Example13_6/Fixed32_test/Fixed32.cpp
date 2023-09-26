@@ -59,35 +59,21 @@ void Fixed32::updateBinaryRepresentation(const Fixed32& rhs)
 
 void Fixed32::updateBinaryRepresentation(const double& rhs)
 {
-  double RHS = rhs;
-  isNegative = 0;
-  if (RHS < 0) 
-  { 
-    isNegative = 1;
-    RHS = (-1)*RHS;
-  }
-
+  isNegative = (rhs < 0) ? 1 : 0;
+  double RHS = (rhs < 0) ? -rhs : rhs;
+  double exp, decr;
   for (int i = 0; i < NUM_BITS; i++)
   {
-    binary[NUM_BITS-1 - i] = 0;
+    exp  = pow(2, NUM_WHOLE_BITS+1 - i);
+    decr = (RHS > exp) ? exp : 0;
+    RHS  = RHS - decr;
 
-    if (RHS > pow(2, NUM_WHOLE_BITS + 1 - i))
-    {
-      RHS = RHS - pow(2, NUM_WHOLE_BITS + 1 - i);
-      binary[NUM_BITS-1 - i] = 1;
-    }
-    
+    binary[NUM_BITS-1 - i]  = (decr != 0) ? 1 : 0;
+    binary_mag[NUM_BITS-1 - i] = binary[NUM_BITS-1 - i];
   }
 
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    binary_mag[i] = binary[i];
-  }
+  if (isNegative) { applyTwosCompliment(); }
 
-  if (isNegative)
-  {
-    applyTwosCompliment();
-  }
 }
 
 void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
@@ -102,7 +88,6 @@ void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
   }
 
   isNegative = (rhs < 0) ? 1 : 0;
-
 }
 
 void Fixed32::updateBinaryRepresentation(const std::string& rhs)
@@ -121,7 +106,6 @@ void Fixed32::updateBinaryRepresentation(const std::string& rhs)
   }
 
   isNegative = (binary[NUM_BITS-1]) ? 1 : 0;
-
 }
 
 
@@ -132,67 +116,51 @@ void Fixed32::updateRemainingRepresentations()
 {
   updateStringRepresentation();
   updateDoubleRepresentation();
-  updateIntegerRepresentation();  
+  updateIntegerRepresentation();
+  updateIntegerBinaryRepresentation();  
 }
 
 void Fixed32::updateStringRepresentation()
 {
-  std::string update;
-  update.resize(NUM_BITS);
+  str_value.resize(NUM_BITS);
 
   for (int i = 0; i < NUM_BITS; i++)
   {
-    update[i] = '0';
-    if (binary[NUM_BITS-1 - i]) {update[i] = '1';}
+    str_value[i] = (binary[NUM_BITS-1 - i]) ? '1' : '0';
   }
-
-  str_value = update;
 }
 
 void Fixed32::updateDoubleRepresentation()
 {
   double update = 0;
+  double incr;
   for (int i = 0; i < NUM_BITS; i++)
   {
-    if (binary_mag[i]) 
-    {
-      update = update + pow(2, i+1 - NUM_DECIMAL_BITS); 
-    }
+    incr    = (binary_mag[i]) ? pow(2, i+1 - NUM_DECIMAL_BITS) : 0;
+    update  = update + incr;
   }
 
-  if (isNegative)
-  {
-    update = (-1)*update;
-  }
-
-  double_value = update;
+  double_value = (isNegative) ? -update : update;
 }
 
 void Fixed32::updateIntegerRepresentation()
 {
-  int32_t result = 0;
-  for(int i = 0; i < NUM_BITS; ++i) {
-      if(binary_mag[NUM_BITS-1 - i]) {
-          // Using the OR operator to set the appropriate bit
-          // if the corresponding bool value is true.
-          result |= (1 << (31 - i));
-      }
-  }
-
-  if (isNegative)
+  std::bitset<32> bits;
+  for (int i = 0; i < NUM_BITS; i++)
   {
-    result = -result;
+    bits[i] = (binary[i]) ? 1 : 0;
   }
-  integer = result;
 
-  int number = integer;
-  int total_bits = sizeof(integer) * 8;
+  integer = static_cast<int32_t>(bits.to_ulong());
+}
 
-  for (int i = total_bits-1; i >= 0; --i)
+void Fixed32::updateIntegerBinaryRepresentation()
+{
+  std::bitset<32> int_bits(integer);
+  for (int i = NUM_BITS-1; i >= 0; --i)
   {
-    integer_binary[i] = (number & (1 << i)) ? 1 : 0;
+    integer_binary[i] = (int_bits[i] == 1) ? 1 : 0;
   }
-
 }
 
 

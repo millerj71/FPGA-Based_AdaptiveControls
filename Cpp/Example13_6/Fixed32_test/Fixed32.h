@@ -13,11 +13,8 @@ class Fixed32
   public: 
     const int NUM_BITS   = 32;
     const int NUM_VALUE_BITS = 31;
-    const int SIGN_BIT = 31;
     int NUM_DECIMAL_BITS = 16;
     int NUM_WHOLE_BITS   = 15;
-
-    double  MAX_VALUE = 0.0;
 
     bool binary[32];
     bool binary_mag[32];
@@ -37,9 +34,6 @@ class Fixed32
 
     // Misc Functions
     void applyTwosCompliment();
-    void toBinary(int32_t input);
-    uint32_t toUnsignedInteger();
-    // void defMaxValue();
 
     // Print Values
     void print();
@@ -55,16 +49,18 @@ class Fixed32
     void updateValueRepresentations(const int32_t& rhs);
     void updateValueRepresentations(const std::string& rhs);
 
+    // Update Binary Values
     void updateBinaryRepresentation(const Fixed32& rhs);
     void updateBinaryRepresentation(const double& rhs);
     void updateBinaryRepresentation(const int32_t& rhs);
     void updateBinaryRepresentation(const std::string& rhs);
 
+    // Update Other Values
     void updateRemainingRepresentations();
     void updateStringRepresentation();
     void updateDoubleRepresentation();
     void updateIntegerRepresentation();
-
+    void updateIntegerBinaryRepresentation();
 
     // Operator Overloading
     Fixed32& operator=(const Fixed32& rhs);
@@ -98,7 +94,6 @@ Fixed32 operator/(const Fixed32& a, const int32_t& b);
 Fixed32 operator/(const int32_t& a, const Fixed32& b);
 Fixed32 operator/(const Fixed32& a, const std::string& b);
 Fixed32 operator/(const std::string& a, const Fixed32& b);
-
 
 
 
