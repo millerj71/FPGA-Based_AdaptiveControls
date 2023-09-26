@@ -2,7 +2,7 @@
 #include <cmath>
 #include <cstdio>
 #include <string>
-// #include <bitset>
+#include <bitset>
 
 #include "Fixed32.h"
 
@@ -101,43 +101,17 @@ void Fixed32::updateBinaryRepresentation(const double& rhs)
 
 void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
 {
-  int32_t number = rhs;
-
-  // std::cout << rhs << std::endl;
-
-  isNegative = 0;
-
-  if (number < 0)
-  {
-    isNegative = 1;
-    number = (-1)*number;
-  }
-
-  for (int i = NUM_VALUE_BITS-1 ; i >= 0; i--)
-  {
-    binary[i] = 0;
-
-    if (number >= pow(2, i))
-    {
-      number = number - pow(2,i);
-      binary[i] = 1;
-    }
-    // std::cout << "i = " << i << " | binary[i] = " << binary[i] << std::endl;
-
-  }
-
-  binary[SIGN_BIT] = 0;
+  std::bitset<32> rhs_bits(rhs);
+  std::bitset<32> mag_bits(abs(rhs));
 
   for (int i = 0; i < NUM_BITS; i++)
   {
-    binary_mag[i] = binary[i];
+    binary[i]     = (rhs_bits[i] == 1) ? 1 : 0;
+    binary_mag[i] = (mag_bits[i] == 1) ? 1 : 0;
   }
 
-  if (isNegative)
-  {
-    std::cout << "APPLY TWOS"<< std::endl;
-    applyTwosCompliment();
-  }
+  isNegative = (rhs < 0) ? 1 : 0;
+
 }
 
 void Fixed32::updateBinaryRepresentation(const std::string& rhs)
