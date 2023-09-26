@@ -18,37 +18,28 @@ Fixed32::~Fixed32() {}
 
 
 
-// Update Value Representations
 void Fixed32::updateValueRepresentations(const Fixed32& rhs)
 {
   updateBinaryRepresentation(rhs);
-  updateStringRepresentation();
-  updateDoubleRepresentation();
-  updateIntegerRepresentation();
+  updateRemainingRepresentations();
 }
 
 void Fixed32::updateValueRepresentations(const double& rhs)
 {
   updateBinaryRepresentation(rhs);
-  updateStringRepresentation();
-  updateDoubleRepresentation();
-  updateIntegerRepresentation();
+  updateRemainingRepresentations();
 }
 
 void Fixed32::updateValueRepresentations(const int32_t& rhs)
 {
   updateBinaryRepresentation(rhs);
-  updateStringRepresentation();
-  updateDoubleRepresentation();
-  updateIntegerRepresentation();
+  updateRemainingRepresentations();
 }
 
 void Fixed32::updateValueRepresentations(const std::string& rhs)
 {
   updateBinaryRepresentation(rhs);
-  updateStringRepresentation();
-  updateDoubleRepresentation();
-  updateIntegerRepresentation();
+  updateRemainingRepresentations();
 }
 
 
@@ -137,6 +128,13 @@ void Fixed32::updateBinaryRepresentation(const std::string& rhs)
 
 
 // Update Other Representations
+void Fixed32::updateRemainingRepresentations()
+{
+  updateStringRepresentation();
+  updateDoubleRepresentation();
+  updateIntegerRepresentation();  
+}
+
 void Fixed32::updateStringRepresentation()
 {
   std::string update;

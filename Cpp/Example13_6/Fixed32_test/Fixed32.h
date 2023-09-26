@@ -60,13 +60,13 @@ class Fixed32
     void updateBinaryRepresentation(const int32_t& rhs);
     void updateBinaryRepresentation(const std::string& rhs);
 
+    void updateRemainingRepresentations();
     void updateStringRepresentation();
     void updateDoubleRepresentation();
     void updateIntegerRepresentation();
 
 
     // Operator Overloading
-    // Fixed32& operator=(const Fixed32& rhs);
     Fixed32& operator=(const Fixed32& rhs);
     Fixed32& operator=(const double& rhs);
     Fixed32& operator=(const int32_t& rhs);
