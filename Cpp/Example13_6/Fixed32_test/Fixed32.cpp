@@ -116,43 +116,20 @@ void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
 
 void Fixed32::updateBinaryRepresentation(const std::string& rhs)
 {
-  if (rhs.length() != NUM_BITS)
-  {
-    return;
-  }
+  if (rhs.length() != NUM_BITS) { return; }
+
+  std::bitset<32> bits(rhs);
+
+  int32_t num = static_cast<int32_t>(bits.to_ulong());
+  std::bitset<32> mag_bits(abs(num));
 
   for (int i = 0; i < NUM_BITS; i++)
   {
-    binary[NUM_BITS-1 - i] = 0;
-
-    if (rhs[i] == '1')
-    {
-      binary[NUM_BITS-1 - i] = 1;
-    }
+    binary[i]     = (bits[i] == 1)     ? 1 : 0;
+    binary_mag[i] = (mag_bits[i] == 1) ? 1 : 0;
   }
 
-  isNegative = 0;
-  if (binary[NUM_BITS-1])
-  {
-    isNegative = 1;
-  }
-
-  if (isNegative)
-  {
-    applyTwosCompliment();
-    for (int i = 0; i < NUM_BITS; i++)
-    {
-      binary_mag[i] = binary[i];
-    }
-    applyTwosCompliment();
-  }
-  else
-  {
-    for (int i = 0; i < NUM_BITS; i++)
-    {
-      binary_mag[i] = binary[i];
-    }
-  }
+  isNegative = (binary[NUM_BITS-1]) ? 1 : 0;
 
 }
 
