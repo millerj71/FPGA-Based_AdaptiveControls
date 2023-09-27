@@ -85,12 +85,82 @@ Fixed32 operator+(const std::string& a, const Fixed32& b)
 }
 
 
-// Overloading "-" Operator (Make Negative)
+
+
+// Overloading "-" Operator (Uniary Subtraction)
 Fixed32 Fixed32::operator-()
 {
   Fixed32 output(NUM_DECIMAL_BITS);
   output = -integer;
   return output;
+}
+
+// Overloading "-" Operator (Subtraction)
+Fixed32 operator-(const Fixed32& a, const Fixed32& b)
+{
+  Fixed32 A(a.NUM_DECIMAL_BITS);
+  Fixed32 B(b.NUM_DECIMAL_BITS);
+  Fixed32 output(a.NUM_DECIMAL_BITS);
+
+  A = a;
+  B = b;
+  output = A + (-B);
+
+  return output;
+}
+
+Fixed32 operator-(const Fixed32& a, const double& b)
+{
+  Fixed32 A(a.NUM_DECIMAL_BITS);
+  Fixed32 B(a.NUM_DECIMAL_BITS);
+  A = a;
+  B = b;
+  return A - B;  
+}
+
+Fixed32 operator-(const double& a, const Fixed32& b)
+{
+  Fixed32 A(b.NUM_DECIMAL_BITS);
+  Fixed32 B(b.NUM_DECIMAL_BITS);
+  A = a;
+  B = b;
+  return A - B; 
+}
+
+Fixed32 operator-(const Fixed32& a, const int32_t& b)
+{
+  Fixed32 A(a.NUM_DECIMAL_BITS);
+  Fixed32 B(a.NUM_DECIMAL_BITS);
+  A = a;
+  B = b;
+  return A - B;
+}
+
+Fixed32 operator-(const int32_t& a, const Fixed32& b)
+{
+  Fixed32 A(b.NUM_DECIMAL_BITS);
+  Fixed32 B(b.NUM_DECIMAL_BITS);
+  A = a;
+  B = b;
+  return A - B; 
+}
+
+Fixed32 operator-(const Fixed32& a, const std::string& b)
+{
+  Fixed32 A(a.NUM_DECIMAL_BITS);
+  Fixed32 B(a.NUM_DECIMAL_BITS);
+  A = a;
+  B = b;
+  return A - B;
+}
+
+Fixed32 operator-(const std::string& a, const Fixed32& b)
+{
+  Fixed32 A(b.NUM_DECIMAL_BITS);
+  Fixed32 B(b.NUM_DECIMAL_BITS);
+  A = a;
+  B = b;
+  return A - B; 
 }
 
 
