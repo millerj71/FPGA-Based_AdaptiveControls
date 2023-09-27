@@ -164,6 +164,7 @@ void Fixed32::updateIntegerBinaryRepresentation()
 }
 
 
+// Misc Functions
 void Fixed32::applyTwosCompliment()
 {
 

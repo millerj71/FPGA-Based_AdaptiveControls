@@ -85,6 +85,15 @@ Fixed32 operator+(const std::string& a, const Fixed32& b)
 }
 
 
+// Overloading "-" Operator (Make Negative)
+Fixed32 Fixed32::operator-()
+{
+  Fixed32 output(NUM_DECIMAL_BITS);
+  output = -integer;
+  return output;
+}
+
+
 
 
 // Overloading * Operator

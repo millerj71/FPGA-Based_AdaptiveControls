@@ -62,15 +62,19 @@ class Fixed32
     void updateIntegerRepresentation();
     void updateIntegerBinaryRepresentation();
 
-    // Operator Overloading
+    // Overloading "=" Operator
     Fixed32& operator=(const Fixed32& rhs);
     Fixed32& operator=(const double& rhs);
     Fixed32& operator=(const int32_t& rhs);
     Fixed32& operator=(const std::string& rhs);
 
+    // Overloading "-" Operator (unary)
+    Fixed32 operator-();
+
 };
 
 
+// Overloading "+" Operator
 Fixed32 operator+(const Fixed32& a, const Fixed32& b);
 Fixed32 operator+(const Fixed32& a, const double& b);
 Fixed32 operator+(const double& a, const Fixed32& b);
@@ -79,6 +83,16 @@ Fixed32 operator+(const int32_t& a, const Fixed32& b);
 Fixed32 operator+(const Fixed32& a, const std::string& b);
 Fixed32 operator+(const std::string& a, const Fixed32& b);
 
+// Overloading "-" Operator
+Fixed32 operator-(const Fixed32& a, const Fixed32& b);
+Fixed32 operator-(const Fixed32& a, const double& b);
+Fixed32 operator-(const double& a, const Fixed32& b);
+Fixed32 operator-(const Fixed32& a, const int32_t& b);
+Fixed32 operator-(const int32_t& a, const Fixed32& b);
+Fixed32 operator-(const Fixed32& a, const std::string& b);
+Fixed32 operator-(const std::string& a, const Fixed32& b);
+
+// Overloading "*" Operator
 Fixed32 operator*(const Fixed32& a, const Fixed32& b);
 Fixed32 operator*(const Fixed32& a, const double& b);
 Fixed32 operator*(const double& a, const Fixed32& b);
@@ -87,6 +101,7 @@ Fixed32 operator*(const int32_t& a, const Fixed32& b);
 Fixed32 operator*(const Fixed32& a, const std::string& b);
 Fixed32 operator*(const std::string& a, const Fixed32& b);
 
+// Overloading "/" Operator
 Fixed32 operator/(const Fixed32& a, const Fixed32& b);
 Fixed32 operator/(const Fixed32& a, const double& b);
 Fixed32 operator/(const double& a, const Fixed32& b);
