@@ -169,32 +169,15 @@ Fixed32 operator-(const std::string& a, const Fixed32& b)
 // Overloading * Operator
 Fixed32 operator*(const Fixed32& a, const Fixed32& b)
 {
-  Fixed32 output(a.NUM_DECIMAL_BITS);
-
   // a.integer and b.integer are int32_t and need to be converted to int64_t
   // before the multiplication step to avoid some binary weirdness.
   int64_t A = a.integer;
   int64_t B = b.integer;
-  int64_t C = A * B;
+  int64_t C = (A * B) >> (a.NUM_DECIMAL_BITS - 1);
 
-  // Removing the decimal points that are out of the Fixed32 output's range.
-  C = C >> (a.NUM_DECIMAL_BITS - 1);
+  Fixed32 output(a.NUM_DECIMAL_BITS);
+  output = static_cast<int32_t>(C);
 
-  std::bitset<64> bits(C);
-
-  std::string output_string;
-  output_string.resize(output.NUM_BITS);
-
-  for (int i = 0; i < output.NUM_BITS; i++)
-  {
-    output_string[output.NUM_BITS-1 - i] = '0';
-    if (bits[i] == 1)
-    {
-      output_string[output.NUM_BITS-1 - i] = '1';
-    }
-  }
-
-  output = output_string;
   return output;
 }
 
