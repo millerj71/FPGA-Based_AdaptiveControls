@@ -243,11 +243,18 @@ Fixed32 operator*(const std::string& a, const Fixed32& b)
 
 
 
-// Overloading / Operator
+// Overloading "/" Operator
 Fixed32 operator/(const Fixed32& a, const Fixed32& b)
 {
+  // This "/" function can result in the integer representation of the
+  // answer being slightly off. It doesn't yet appear to affect the double
+  // result and should be close enough to work for our purposes.
+  int64_t A = static_cast<int64_t>(a.integer) << 32;
+  int64_t B = b.integer;
+  int64_t OUT = (A / B) >> 32 - a.NUM_DECIMAL_BITS+1;
+
   Fixed32 output(a.NUM_DECIMAL_BITS);
-  output = a.integer / b.integer;
+  output = static_cast<int32_t>(OUT);
   return output;
 }
 
@@ -294,6 +301,8 @@ Fixed32 operator/(const std::string& a, const Fixed32& b)
 {
   Fixed32 A(b.NUM_DECIMAL_BITS);
   Fixed32 output(b.NUM_DECIMAL_BITS);
+  
+  A = a;
   output = A / b;
   return output;
 }
