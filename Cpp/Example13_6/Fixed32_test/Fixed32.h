@@ -17,10 +17,6 @@ class Fixed32
     int NUM_DECIMAL_BITS = 16;
     int NUM_WHOLE_BITS   = 15;
 
-    bool binary[32];
-    bool binary_mag[32];
-    bool integer_binary[32];
-
     std::bitset<32> bits;
     std::bitset<32> mag_bits;
     double  double_value;
@@ -42,11 +38,9 @@ class Fixed32
     // Print Values
     void print();
     void printBits();
-    void printBinary();
     void printString();
     void printDouble();
     void printInteger();
-    void printIntegerBinary();
 
     // Update Values
     void updateValueRepresentations(const Fixed32& rhs);
@@ -62,11 +56,9 @@ class Fixed32
 
     // Update Other Values
     void updateRemainingRepresentations();
-    void updateBinaryRepresentation();
     void updateStringRepresentation();
     void updateDoubleRepresentation();
     void updateIntegerRepresentation();
-    void updateIntegerBinaryRepresentation();
 
     // Overloading "=" Operator
     Fixed32& operator=(const Fixed32& rhs);

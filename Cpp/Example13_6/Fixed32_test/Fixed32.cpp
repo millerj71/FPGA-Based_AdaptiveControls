@@ -98,20 +98,9 @@ void Fixed32::updateBitsRepresentation(const std::string& rhs)
 // Update Other Representations
 void Fixed32::updateRemainingRepresentations()
 {
-  updateBinaryRepresentation();
   updateStringRepresentation();
   updateDoubleRepresentation();
   updateIntegerRepresentation();
-  updateIntegerBinaryRepresentation();  
-}
-
-void Fixed32::updateBinaryRepresentation()
-{
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    binary[i] = bits[i];
-    binary_mag[i] = mag_bits[i];
-  }
 }
 
 void Fixed32::updateStringRepresentation()
@@ -137,15 +126,6 @@ void Fixed32::updateIntegerRepresentation()
   integer = static_cast<int32_t>(bits.to_ulong());
 }
 
-void Fixed32::updateIntegerBinaryRepresentation()
-{
-  std::bitset<32> int_bits(integer);
-  for (int i = NUM_BITS-1; i >= 0; --i)
-  {
-    integer_binary[i] = (int_bits[i] == 1) ? 1 : 0;
-  }
-}
-
 
 
 
@@ -155,26 +135,14 @@ void Fixed32::updateIntegerBinaryRepresentation()
 void Fixed32::print()
 {
   printBits();
-  printBinary();
   printString();
   printDouble();
   printInteger();
-  printIntegerBinary();
 }
 
 void Fixed32::printBits()
 {
   std::cout << "bits   = " <<  bits << std::endl;
-}
-
-void Fixed32::printBinary()
-{
-  std::cout << "binary = ";
-  for (int i = 0 ; i < NUM_BITS ; i++)
-  {
-    std::cout << binary[NUM_BITS-1 - i];
-  }
-  std::cout << std::endl;
 }
 
 void Fixed32::printString()
@@ -190,14 +158,4 @@ void Fixed32::printDouble()
 void Fixed32::printInteger()
 {
   std::cout << "integer = " << integer << std::endl;
-}
-
-void Fixed32::printIntegerBinary()
-{
-  std::cout << "integer-binary = ";
-  for (int i = 0 ; i < NUM_BITS ; i++)
-  {
-    std::cout << integer_binary[NUM_BITS-1 - i];
-  }
-  std::cout << std::endl;
 }
