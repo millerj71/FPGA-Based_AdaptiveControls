@@ -116,12 +116,7 @@ void Fixed32::updateBinaryRepresentation()
 
 void Fixed32::updateStringRepresentation()
 {
-  str_value.resize(NUM_BITS);
-
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    str_value[i] = (binary[NUM_BITS-1 - i]) ? '1' : '0';
-  }
+  str_value = bits.to_string();
 }
 
 void Fixed32::updateDoubleRepresentation()
@@ -139,12 +134,6 @@ void Fixed32::updateDoubleRepresentation()
 
 void Fixed32::updateIntegerRepresentation()
 {
-  std::bitset<32> bits;
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    bits[i] = (binary[i]) ? 1 : 0;
-  }
-
   integer = static_cast<int32_t>(bits.to_ulong());
 }
 
@@ -155,36 +144,6 @@ void Fixed32::updateIntegerBinaryRepresentation()
   {
     integer_binary[i] = (int_bits[i] == 1) ? 1 : 0;
   }
-}
-
-
-// Misc Functions
-void Fixed32::applyTwosCompliment()
-{
-
-  bool neg_bin[32];
-  bool one[32];
-
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    neg_bin[i] = !binary[i];
-    one[i]    = 0;
-  }
-  one[0] = 1;
-
-  bool carry = 0;
-  bool update[32];
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    update[i] = neg_bin[i] ^ one[i] ^ carry;
-    carry = (neg_bin[i] & one[i]) | (carry & (neg_bin[i] ^ one[i]));
-  }
-
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    binary[i] = update[i];
-  }
-  
 }
 
 
