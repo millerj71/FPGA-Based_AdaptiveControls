@@ -18,12 +18,9 @@ class Fixed32
     int NUM_WHOLE_BITS   = 15;
 
     std::bitset<32> bits;
-    std::bitset<32> mag_bits;
     double  double_value;
     int32_t integer;
     std::string str_value;
-
-    bool isNegative;
 
     // Constructors
     Fixed32();

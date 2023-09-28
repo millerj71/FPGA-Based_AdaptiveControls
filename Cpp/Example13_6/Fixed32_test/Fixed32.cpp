@@ -46,50 +46,41 @@ void Fixed32::updateValueRepresentations(const std::string& rhs)
 
 
 // Update Bit Values
-void Fixed32::updateBitsRepresentation(const Fixed32& rhs)
+void Fixed32::updateBitsRepresentation(const Fixed32& rhs) 
 {
   bits = rhs.bits;
-  mag_bits = rhs.mag_bits;
-  isNegative = rhs.isNegative;
 }
 
 void Fixed32::updateBitsRepresentation(const double& rhs)
 {
-  isNegative = (rhs < 0) ? 1 : 0;
   double RHS = (rhs < 0) ? -rhs : rhs;
   double exp, decr;
+  std::bitset<32> mag;
   for (int i = 0; i < NUM_BITS; i++)
   {
     exp  = pow(2, NUM_WHOLE_BITS+1 - i);
     decr = (RHS > exp) ? exp : 0;
     RHS  = RHS - decr;
 
-    mag_bits[NUM_BITS-1 - i]  = (decr != 0) ? 1 : 0;
+    mag[NUM_BITS-1 - i]  = (decr != 0) ? 1 : 0;
+
   }
 
+  int32_t value = static_cast<int32_t>(mag.to_ulong());
 
-  int32_t value = static_cast<int32_t>(mag_bits.to_ulong());
-  
-  bits = (isNegative) ? std::bitset<32>(-value) : std::bitset<32>(value);
+  bits = (rhs < 0) ? std::bitset<32>(-value) : std::bitset<32>(value);
   
 }
 
 void Fixed32::updateBitsRepresentation(const int32_t& rhs)
 {
   bits = std::bitset<32>(rhs);
-  mag_bits = std::bitset<32>(abs(rhs));
-  isNegative = (bits != mag_bits) ? 1 : 0;
 }
 
 void Fixed32::updateBitsRepresentation(const std::string& rhs)
 {
   if (rhs.length() != NUM_BITS) { return; }
-
   bits = std::bitset<32>(rhs);
-  isNegative = (bits[NUM_BITS-1] == 1) ? 1 : 0;
-
-  int32_t value = static_cast<int32_t>(bits.to_ulong());
-  mag_bits = (isNegative) ? std::bitset<32>(-value) : bits;
 }
 
 
@@ -98,9 +89,9 @@ void Fixed32::updateBitsRepresentation(const std::string& rhs)
 // Update Other Representations
 void Fixed32::updateRemainingRepresentations()
 {
+  updateIntegerRepresentation();
   updateStringRepresentation();
   updateDoubleRepresentation();
-  updateIntegerRepresentation();
 }
 
 void Fixed32::updateStringRepresentation()
@@ -112,21 +103,22 @@ void Fixed32::updateDoubleRepresentation()
 {
   double update = 0;
   double incr;
+  std::bitset<32> mag(abs(integer));
+
   for (int i = 0; i < NUM_BITS; i++)
   {
-    incr    = (mag_bits[i]) ? pow(2, i+1 - NUM_DECIMAL_BITS) : 0;
+    incr    = (mag[i]) ? pow(2, i+1 - NUM_DECIMAL_BITS) : 0;
     update  = update + incr;
   }
 
-  double_value = (isNegative) ? -update : update;
+  double_value = (integer < 0) ? -update : update;
+
 }
 
 void Fixed32::updateIntegerRepresentation()
 {
   integer = static_cast<int32_t>(bits.to_ulong());
 }
-
-
 
 
 
