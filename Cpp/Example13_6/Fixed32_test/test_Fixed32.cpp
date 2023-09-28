@@ -38,22 +38,29 @@ int main()
   test2 = str2;
 
   Fixed32 test3(NUM_DECIMAL_BITS);
-  test3 = str1 * test2;
+  test3 = test1 * test2.inv();
 
   Fixed32 test4(NUM_DECIMAL_BITS);
-  test4 = dub1 * dub2;
+  test4 = test1 * inv(test2);
 
-  // std::cout << "Test1:" << std::endl;
-  // test1.print();
+  Fixed32 test5(NUM_DECIMAL_BITS);
+  test5 = dub1 / dub2;
 
-  // std::cout << std::endl << "Test2:" << std::endl;
-  // test2.print();
+  std::cout << std::endl << "Test1:" << std::endl;
+  test1.print();
 
-  // std::cout << std::endl << "Test3:" << std::endl;
-  // test3.print();
+  std::cout << std::endl << "Test2:" << std::endl;
+  test2.print();
 
-  // std::cout << std::endl << "Test4:" << std::endl;
-  // test4.print();
+  std::cout << std::endl << "Test3:" << std::endl;
+  test3.print();
+
+  std::cout << std::endl << "Test4:" << std::endl;
+  test4.print();
+
+  std::cout << std::endl << "Test5:" << std::endl;
+  test5.print();
+  std::cout << std::endl;
 
   // std::cout << std::endl << "---------------------------------------------------" << std::endl;
   // std::cout << "Test3.double = " << test3.double_value << " | Test4.double = " << test4.double_value << std::endl;

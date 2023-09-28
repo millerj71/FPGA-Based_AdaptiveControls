@@ -33,7 +33,7 @@ class Fixed32
     ~Fixed32();
 
     // Misc Functions
-    void applyTwosCompliment();
+    Fixed32 inv();
 
     // Print Values
     void print();
@@ -72,6 +72,11 @@ class Fixed32
 };
 
 
+
+// Misc Functions
+Fixed32 inv(const Fixed32& input);
+
+
 // Overloading "+" Operator
 Fixed32 operator+(const Fixed32& a, const Fixed32& b);
 Fixed32 operator+(const Fixed32& a, const double& b);
@@ -107,7 +112,6 @@ Fixed32 operator/(const Fixed32& a, const int32_t& b);
 Fixed32 operator/(const int32_t& a, const Fixed32& b);
 Fixed32 operator/(const Fixed32& a, const std::string& b);
 Fixed32 operator/(const std::string& a, const Fixed32& b);
-
 
 
 #endif // FIXED32_H

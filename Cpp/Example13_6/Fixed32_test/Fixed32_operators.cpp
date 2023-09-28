@@ -6,6 +6,40 @@
 #include "Fixed32.h"
 
 
+// Misc Functions
+Fixed32 Fixed32::inv()
+{
+  Fixed32 update(NUM_DECIMAL_BITS);
+  update = integer;
+
+  Fixed32 one(update.NUM_DECIMAL_BITS);
+  one = 1.0;
+
+  int64_t A = static_cast<int64_t>(one.integer) << 32;
+  int64_t B = update.integer;
+  int64_t OUT = (A / B) >> 32 - update.NUM_DECIMAL_BITS+1;
+
+  Fixed32 output(update.NUM_DECIMAL_BITS);
+  output = static_cast<int32_t>(OUT);
+  return output;
+
+}
+
+Fixed32 inv(const Fixed32& input)
+{
+  // The input must first be copied into a separate variable before the 
+  // .inv() function can be called. 
+  Fixed32 A(input.NUM_DECIMAL_BITS);
+  Fixed32 output(input.NUM_DECIMAL_BITS);
+
+  A = input;
+  output = A.inv();
+  return output;
+}
+
+
+
+
 // Overloading = Operator
 Fixed32& Fixed32::operator=(const Fixed32& rhs)
 {
@@ -229,16 +263,7 @@ Fixed32 operator*(const std::string& a, const Fixed32& b)
 // Overloading "/" Operator
 Fixed32 operator/(const Fixed32& a, const Fixed32& b)
 {
-  // This "/" function can result in the integer representation of the
-  // answer being slightly off. It doesn't yet appear to affect the double
-  // result and should be close enough to work for our purposes.
-  int64_t A = static_cast<int64_t>(a.integer) << 32;
-  int64_t B = b.integer;
-  int64_t OUT = (A / B) >> 32 - a.NUM_DECIMAL_BITS+1;
-
-  Fixed32 output(a.NUM_DECIMAL_BITS);
-  output = static_cast<int32_t>(OUT);
-  return output;
+  return a * inv(b);
 }
 
 Fixed32 operator/(const Fixed32& a, const double& b)
