@@ -7,7 +7,7 @@
 #include "Fixed32_unit_tests.h"
 
 
-// LOAD TESTS
+// Load Values Tests
 void runDoubleLoadTest(int32_t NUM_DECIMAL_BITS)
 {
   int NUM_TESTS = 100;
@@ -53,7 +53,6 @@ void runDoubleLoadTest(int32_t NUM_DECIMAL_BITS)
       ALL_TESTS_PASSED = 0;
     }
 
-    // std::cout << "RANDOM VALUE: " << random_value << " | TEST.DOUBLE: " << test.double_value << std::endl;
 
   }
 
@@ -195,5 +194,27 @@ void runStringLoadTest(int32_t NUM_DECIMAL_BITS)
   {
     std::cout << "SUCCESS!!! STRING  LOADING TEST PASSED!!!" << std::endl;
   }
+
+}
+
+
+// Operation Overrides Tests
+void runAddTest(int32_t NUM_DECIMAL_BITS)
+{
+
+}
+
+void runSubTest(int32_t NUM_DECIMAL_BITS)
+{
+
+}
+
+void runMultTest(int32_t NUM_DECIMAL_BITS)
+{
+
+}
+
+void runDivTest(int32_t NUM_DECIMAL_BITS)
+{
 
 }
