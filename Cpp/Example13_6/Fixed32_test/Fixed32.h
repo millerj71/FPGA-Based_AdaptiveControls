@@ -1,5 +1,3 @@
-
-
 #ifndef FIXED32_H
 #define FIXED32_H
 
@@ -39,11 +37,9 @@ class Fixed32
     void printDouble();
     void printInteger();
 
-    // Update Values
-    void updateValueRepresentations(const Fixed32& rhs);
-    void updateValueRepresentations(const double& rhs);
-    void updateValueRepresentations(const int32_t& rhs);
-    void updateValueRepresentations(const std::string& rhs);
+    // Template Testing
+    template <typename T>
+    void updateValueRepresentations(const T& rhs);
 
     // Update Bit Values
     void updateBitsRepresentation(const Fixed32& rhs);
@@ -109,6 +105,15 @@ Fixed32 operator/(const Fixed32& a, const int32_t& b);
 Fixed32 operator/(const int32_t& a, const Fixed32& b);
 Fixed32 operator/(const Fixed32& a, const std::string& b);
 Fixed32 operator/(const std::string& a, const Fixed32& b);
+
+
+// Update Values Template
+template <typename T>
+void Fixed32::updateValueRepresentations(const T& rhs)
+{
+  updateBitsRepresentation(rhs);
+  updateRemainingRepresentations();
+}
 
 
 #endif // FIXED32_H

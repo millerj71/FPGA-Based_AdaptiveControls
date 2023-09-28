@@ -18,33 +18,6 @@ Fixed32::~Fixed32() {}
 
 
 
-void Fixed32::updateValueRepresentations(const Fixed32& rhs)
-{
-  updateBitsRepresentation(rhs);
-  updateRemainingRepresentations();
-}
-
-void Fixed32::updateValueRepresentations(const double& rhs)
-{
-  updateBitsRepresentation(rhs);
-  updateRemainingRepresentations();
-}
-
-void Fixed32::updateValueRepresentations(const int32_t& rhs)
-{
-  updateBitsRepresentation(rhs);
-  updateRemainingRepresentations();
-}
-
-void Fixed32::updateValueRepresentations(const std::string& rhs)
-{
-  updateBitsRepresentation(rhs);
-  updateRemainingRepresentations();
-}
-
-
-
-
 // Update Bit Values
 void Fixed32::updateBitsRepresentation(const Fixed32& rhs) 
 {
