@@ -19,7 +19,7 @@ int main()
   int32_t NUM_DECIMAL_BITS = 25;
 
   runDoubleLoadTest(NUM_DECIMAL_BITS);
-  // runIntegerLoadTest(NUM_DECIMAL_BITS);
+  runIntegerLoadTest(NUM_DECIMAL_BITS);
   // runStringLoadTest(NUM_DECIMAL_BITS);
 
 

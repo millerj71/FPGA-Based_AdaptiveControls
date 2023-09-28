@@ -8,7 +8,8 @@
 
 // Loading Values Tests
 void runDoubleLoadTest(int32_t NUM_DECIMAL_BITS, double acceptable_error = 0.000001, int NUM_TESTS = 100);
-// void runIntegerLoadTest(int32_t NUM_DECIMAL_BITS);
+void runIntegerLoadTest(int32_t NUM_DECIMAL_BITS, int NUM_TESTS = 100);
+
 // void runStringLoadTest(int32_t NUM_DECIMAL_BITS);
 
 // // Operation Overrides Tests
