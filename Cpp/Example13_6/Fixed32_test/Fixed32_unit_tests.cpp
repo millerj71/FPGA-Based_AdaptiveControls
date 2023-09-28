@@ -87,23 +87,25 @@ void runStringLoadTest(int32_t NUM_DECIMAL_BITS, int NUM_TESTS)
 }
 
 
-// // Operation Overrides Tests
-// void runAddTest(int32_t NUM_DECIMAL_BITS)
-// {
 
-// }
 
-// void runSubTest(int32_t NUM_DECIMAL_BITS)
-// {
+// Operation Overrides Tests
+void runAddTest(int32_t NUM_DECIMAL_BITS)
+{
 
-// }
+}
 
-// void runMultTest(int32_t NUM_DECIMAL_BITS)
-// {
+void runSubTest(int32_t NUM_DECIMAL_BITS)
+{
 
-// }
+}
 
-// void runDivTest(int32_t NUM_DECIMAL_BITS)
-// {
+void runMultTest(int32_t NUM_DECIMAL_BITS)
+{
 
-// }
+}
+
+void runDivTest(int32_t NUM_DECIMAL_BITS)
+{
+
+}
