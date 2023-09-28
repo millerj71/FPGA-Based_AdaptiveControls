@@ -20,7 +20,7 @@ int main()
 
   runDoubleLoadTest(NUM_DECIMAL_BITS);
   runIntegerLoadTest(NUM_DECIMAL_BITS);
-  // runStringLoadTest(NUM_DECIMAL_BITS);
+  runStringLoadTest(NUM_DECIMAL_BITS);
 
 
   int32_t int1  = 89590333;
@@ -43,21 +43,21 @@ int main()
   Fixed32 test4(NUM_DECIMAL_BITS);
   test4 = dub1 * dub2;
 
-  std::cout << "Test1:" << std::endl;
-  test1.print();
+  // std::cout << "Test1:" << std::endl;
+  // test1.print();
 
-  std::cout << std::endl << "Test2:" << std::endl;
-  test2.print();
+  // std::cout << std::endl << "Test2:" << std::endl;
+  // test2.print();
 
-  std::cout << std::endl << "Test3:" << std::endl;
-  test3.print();
+  // std::cout << std::endl << "Test3:" << std::endl;
+  // test3.print();
 
-  std::cout << std::endl << "Test4:" << std::endl;
-  test4.print();
+  // std::cout << std::endl << "Test4:" << std::endl;
+  // test4.print();
 
-  std::cout << std::endl << "---------------------------------------------------" << std::endl;
-  std::cout << "Test3.double = " << test3.double_value << " | Test4.double = " << test4.double_value << std::endl;
-  std::cout << "---------------------------------------------------" << std::endl << std::endl;
+  // std::cout << std::endl << "---------------------------------------------------" << std::endl;
+  // std::cout << "Test3.double = " << test3.double_value << " | Test4.double = " << test4.double_value << std::endl;
+  // std::cout << "---------------------------------------------------" << std::endl << std::endl;
 
 
   // Fixed32 test5(NUM_DECIMAL_BITS);
