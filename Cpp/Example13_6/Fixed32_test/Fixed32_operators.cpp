@@ -173,7 +173,7 @@ Fixed32 operator*(const Fixed32& a, const Fixed32& b)
   // before the multiplication step to avoid some binary weirdness.
   int64_t A = a.integer;
   int64_t B = b.integer;
-  int64_t C = (A * B) >> (a.NUM_DECIMAL_BITS - 1);
+  int64_t C = (A * B) >> (a.NUM_DECIMAL_BITS-1);
 
   Fixed32 output(a.NUM_DECIMAL_BITS);
   output = static_cast<int32_t>(C);

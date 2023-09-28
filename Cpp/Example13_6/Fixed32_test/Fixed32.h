@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <bitset>
 
 class Fixed32
 {
@@ -19,6 +20,9 @@ class Fixed32
     bool binary[32];
     bool binary_mag[32];
     bool integer_binary[32];
+
+    std::bitset<32> bits;
+    std::bitset<32> mag_bits;
     double  double_value;
     int32_t integer;
     std::string str_value;
@@ -37,6 +41,7 @@ class Fixed32
 
     // Print Values
     void print();
+    void printBits();
     void printBinary();
     void printString();
     void printDouble();
@@ -49,14 +54,15 @@ class Fixed32
     void updateValueRepresentations(const int32_t& rhs);
     void updateValueRepresentations(const std::string& rhs);
 
-    // Update Binary Values
-    void updateBinaryRepresentation(const Fixed32& rhs);
-    void updateBinaryRepresentation(const double& rhs);
-    void updateBinaryRepresentation(const int32_t& rhs);
-    void updateBinaryRepresentation(const std::string& rhs);
+    // Update Bit Values
+    void updateBitsRepresentation(const Fixed32& rhs);
+    void updateBitsRepresentation(const double& rhs);
+    void updateBitsRepresentation(const int32_t& rhs);
+    void updateBitsRepresentation(const std::string& rhs);
 
     // Update Other Values
     void updateRemainingRepresentations();
+    void updateBinaryRepresentation();
     void updateStringRepresentation();
     void updateDoubleRepresentation();
     void updateIntegerRepresentation();

@@ -20,44 +20,40 @@ Fixed32::~Fixed32() {}
 
 void Fixed32::updateValueRepresentations(const Fixed32& rhs)
 {
-  updateBinaryRepresentation(rhs);
+  updateBitsRepresentation(rhs);
   updateRemainingRepresentations();
 }
 
 void Fixed32::updateValueRepresentations(const double& rhs)
 {
-  updateBinaryRepresentation(rhs);
+  updateBitsRepresentation(rhs);
   updateRemainingRepresentations();
 }
 
 void Fixed32::updateValueRepresentations(const int32_t& rhs)
 {
-  updateBinaryRepresentation(rhs);
+  updateBitsRepresentation(rhs);
   updateRemainingRepresentations();
 }
 
 void Fixed32::updateValueRepresentations(const std::string& rhs)
 {
-  updateBinaryRepresentation(rhs);
+  updateBitsRepresentation(rhs);
   updateRemainingRepresentations();
 }
 
 
 
 
-// Update Binary Representations
-void Fixed32::updateBinaryRepresentation(const Fixed32& rhs)
+// Update Bit Values
+void Fixed32::updateBitsRepresentation(const Fixed32& rhs)
 {
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    binary[i] = rhs.binary[i];
-    binary_mag[i] = rhs.binary_mag[i];
-  }
-
+  bits = rhs.bits;
+  mag_bits = rhs.mag_bits;
   isNegative = rhs.isNegative;
 }
 
-void Fixed32::updateBinaryRepresentation(const double& rhs)
+void Fixed32::updateBitsRepresentation(const double& rhs)
 {
   isNegative = (rhs < 0) ? 1 : 0;
   double RHS = (rhs < 0) ? -rhs : rhs;
@@ -68,44 +64,32 @@ void Fixed32::updateBinaryRepresentation(const double& rhs)
     decr = (RHS > exp) ? exp : 0;
     RHS  = RHS - decr;
 
-    binary[NUM_BITS-1 - i]  = (decr != 0) ? 1 : 0;
-    binary_mag[NUM_BITS-1 - i] = binary[NUM_BITS-1 - i];
+    mag_bits[NUM_BITS-1 - i]  = (decr != 0) ? 1 : 0;
   }
 
-  if (isNegative) { applyTwosCompliment(); }
 
+  int32_t value = static_cast<int32_t>(mag_bits.to_ulong());
+  
+  bits = (isNegative) ? std::bitset<32>(-value) : std::bitset<32>(value);
+  
 }
 
-void Fixed32::updateBinaryRepresentation(const int32_t& rhs)
+void Fixed32::updateBitsRepresentation(const int32_t& rhs)
 {
-  std::bitset<32> rhs_bits(rhs);
-  std::bitset<32> mag_bits(abs(rhs));
-
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    binary[i]     = (rhs_bits[i] == 1) ? 1 : 0;
-    binary_mag[i] = (mag_bits[i] == 1) ? 1 : 0;
-  }
-
-  isNegative = (rhs < 0) ? 1 : 0;
+  bits = std::bitset<32>(rhs);
+  mag_bits = std::bitset<32>(abs(rhs));
+  isNegative = (bits != mag_bits) ? 1 : 0;
 }
 
-void Fixed32::updateBinaryRepresentation(const std::string& rhs)
+void Fixed32::updateBitsRepresentation(const std::string& rhs)
 {
   if (rhs.length() != NUM_BITS) { return; }
 
-  std::bitset<32> bits(rhs);
+  bits = std::bitset<32>(rhs);
+  isNegative = (bits[NUM_BITS-1] == 1) ? 1 : 0;
 
-  int32_t num = static_cast<int32_t>(bits.to_ulong());
-  std::bitset<32> mag_bits(abs(num));
-
-  for (int i = 0; i < NUM_BITS; i++)
-  {
-    binary[i]     = (bits[i] == 1)     ? 1 : 0;
-    binary_mag[i] = (mag_bits[i] == 1) ? 1 : 0;
-  }
-
-  isNegative = (binary[NUM_BITS-1]) ? 1 : 0;
+  int32_t value = static_cast<int32_t>(bits.to_ulong());
+  mag_bits = (isNegative) ? std::bitset<32>(-value) : bits;
 }
 
 
@@ -114,10 +98,20 @@ void Fixed32::updateBinaryRepresentation(const std::string& rhs)
 // Update Other Representations
 void Fixed32::updateRemainingRepresentations()
 {
+  updateBinaryRepresentation();
   updateStringRepresentation();
   updateDoubleRepresentation();
   updateIntegerRepresentation();
   updateIntegerBinaryRepresentation();  
+}
+
+void Fixed32::updateBinaryRepresentation()
+{
+  for (int i = 0; i < NUM_BITS; i++)
+  {
+    binary[i] = bits[i];
+    binary_mag[i] = mag_bits[i];
+  }
 }
 
 void Fixed32::updateStringRepresentation()
@@ -136,7 +130,7 @@ void Fixed32::updateDoubleRepresentation()
   double incr;
   for (int i = 0; i < NUM_BITS; i++)
   {
-    incr    = (binary_mag[i]) ? pow(2, i+1 - NUM_DECIMAL_BITS) : 0;
+    incr    = (mag_bits[i]) ? pow(2, i+1 - NUM_DECIMAL_BITS) : 0;
     update  = update + incr;
   }
 
@@ -201,11 +195,17 @@ void Fixed32::applyTwosCompliment()
 // Print Functions for Testing
 void Fixed32::print()
 {
+  printBits();
   printBinary();
   printString();
   printDouble();
   printInteger();
   printIntegerBinary();
+}
+
+void Fixed32::printBits()
+{
+  std::cout << "bits   = " <<  bits << std::endl;
 }
 
 void Fixed32::printBinary()
